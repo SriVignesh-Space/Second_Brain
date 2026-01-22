@@ -63,7 +63,27 @@ app.post('/api/v1/signin', async (req,res) => {
 
 app.use(Authenticate)
 
-app.get('/test', (req,res) => res.send("fire"))
+app.get('/test', (req,res) => res.send("fire")) 
+
+app.get('/api/v1/content', (req,res) => {
+    
+})
+
+app.post('api/v1/content', (req,res) => {
+
+})
+
+app.delete('/api/v1/content', (req,res) => {
+
+})
+
+app.post("api/v1/brain/share", (req,res) => {
+
+})
+
+app.get('api/v1/brain/:sharelink')
+
+
 
 connectDB().then(() => {
     app.listen(process.env.port, () => console.log("server on port", process.env.port));

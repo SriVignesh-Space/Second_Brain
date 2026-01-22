@@ -15,7 +15,7 @@ export type userType = z.infer<typeof userObject>
 
 
 // mongoose user 
-const userSchema = new Schema({
+const userSchema = new Schema<userType>({
     username : String,
     email : String,
     password : String
