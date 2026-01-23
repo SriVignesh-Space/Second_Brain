@@ -3,11 +3,10 @@ import * as z from 'zod'
 
 export const ContentObject = z.object(
     {
-    userId : z.string(),
+    userId : z.string("User Id not valid"),
     title : z.string(),
-    link : z.url(),
-    type : z.enum(["youtube" ,"Instagram" , "X" , "Notes" , "Document" , "Other"]),
-    time : z.date(),
+    link : z.url("Url format should be followed"),
+    type : z.enum(["Youtube" ,"Instagram" , "X" , "Notes" , "Document" , "Other"],"Must be in the specified type"),
     description : z.string().optional()
 }
 )
@@ -26,12 +25,11 @@ const ContentSchema = new Schema<contentDBType>({
     type : {
         type : String,
         required: true,
-        enum : ["youtube" ,"Instagram" , "X" , "Notes" , "Document" , "Other"]
+        enum : ["Youtube" ,"Instagram" , "X" , "Notes" , "Document" , "Other"]
     },
-    time : {type : Date, required : true},
     description : {type : String, required:false} 
 }, {
     timestamps : true
 })
 
-export const ContentModel = model("content", ContentSchema);
+export const ContentModel = model("content", ContentSchema);    

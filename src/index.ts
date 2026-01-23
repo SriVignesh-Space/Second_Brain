@@ -7,6 +7,7 @@ import logger from './middleware/logger.js';
 import connectDB from './model/db.js';
 import userObject,{userModel, type userType } from './model/userModel.js';
 import Authenticate from './middleware/auth.js';
+import { ContentModel, ContentObject } from './model/ContentModel.js';
 
 const app = express()
 app.use(express.json())
@@ -65,23 +66,49 @@ app.use(Authenticate)
 
 app.get('/test', (req,res) => res.send("fire")) 
 
-app.get('/api/v1/content', (req,res) => {
+app.get('/api/v1/content', async (req, res) => {
+
+    // @ts-ignore
+    const uid  = req.user?.id;
+    
+    const content = await ContentModel.find({userId : uid})
+    res.status(200).send(content);
+})
+
+app.post('/api/v1/content', async (req,res) => {
+    try{
+        const content = req.body;
+        await ContentObject.parse(content);
+
+        ContentModel.create(content);
+        res.status(200).send({success : true, content});
+    }
+    catch (e : any) { 
+        console.log(e.message);
+        res.status(400).send({error : "Content Validation Failed"});
+    }
+})
+
+app.delete('/api/v1/content/:id', async (req,res) => {
+    const {id} = req.params;
+   try{
+        await ContentModel.findByIdAndDelete(id);
+        // @ts-ignore
+        return res.status(200).send({id , message : "Deleted Successfully"});
+   }
+   catch(e : any) {
+    console.log(e.message);
+    res.status(400).send({error : e});
+   }
+})
+
+app.post("/api/v1/brain/share", (req,res) => {
     
 })
 
-app.post('api/v1/content', (req,res) => {
+app.get('/api/v1/brain/:sharelink',(req,res) => {
 
 })
-
-app.delete('/api/v1/content', (req,res) => {
-
-})
-
-app.post("api/v1/brain/share", (req,res) => {
-
-})
-
-app.get('api/v1/brain/:sharelink')
 
 
 
