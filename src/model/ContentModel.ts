@@ -1,4 +1,4 @@
-import mongoose, { model, Model, Schema, Types } from "mongoose";
+import mongoose, { model, Schema, Types } from "mongoose";
 import * as z from 'zod'
 
 export const ContentObject = z.object(
@@ -7,6 +7,7 @@ export const ContentObject = z.object(
     title : z.string(),
     link : z.url("Url format should be followed"),
     type : z.enum(["Youtube" ,"Instagram" , "X" , "Notes" , "Document" , "Other"],"Must be in the specified type"),
+    share : z.boolean(),
     description : z.string().optional()
 }
 )
@@ -14,7 +15,7 @@ export const ContentObject = z.object(
 type ContentType = z.infer<typeof ContentObject>;
 
 // mongoose Schema
-type contentDBType = Omit<ContentType, "userId"> & {
+export type contentDBType = Omit<ContentType, "userId"> & {
     userId : Types.ObjectId
 }
 
@@ -26,6 +27,10 @@ const ContentSchema = new Schema<contentDBType>({
         type : String,
         required: true,
         enum : ["Youtube" ,"Instagram" , "X" , "Notes" , "Document" , "Other"]
+    },
+    share : {
+        type : Boolean,
+        required : true,
     },
     description : {type : String, required:false} 
 }, {
