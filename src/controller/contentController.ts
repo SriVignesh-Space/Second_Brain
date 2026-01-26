@@ -17,7 +17,6 @@ export const postContent = async (req : Request,res : Response) => {
 
         // @ts-ignore
         content.userId = req.user?.id;
-        console.log(content)
         await ContentObject.parse(content);
 
         ContentModel.create(content);
@@ -26,6 +25,23 @@ export const postContent = async (req : Request,res : Response) => {
     catch (e : any) { 
         console.log(e.message);
         res.status(400).send({error : "Content Validation Failed"});
+    }
+}
+
+export const updateContent = async (req : Request, res : Response) => {
+    try{
+        const content = req.body;
+        const {id} = req.params;
+        // @ts-ignore
+        content.userId = req.user?.id;
+        await ContentObject.parse(content);
+
+        await ContentModel.findByIdAndUpdate(id, content);
+        res.status(200).send({success : true, id, content});
+    }
+    catch(e : any){
+        console.log(e.message);
+        res.status(500).send({error : "Updation failed"})
     }
 }
 

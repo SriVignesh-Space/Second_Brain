@@ -27,7 +27,7 @@ export const signup = async (req : Request,res : Response) => {
 export const signin = async (req : Request,res : Response) => {
     try{
         const user  = req.body;
-        let existing = await userModel.findOne({username : user.username});
+        let existing = await userModel.findOne({email : user.email});
 
         if(existing === null) throw new Error("User Not Found");
 

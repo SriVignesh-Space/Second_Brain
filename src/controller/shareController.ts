@@ -64,3 +64,20 @@ export const getContent = async (req : Request,res : Response) => {
         res.status(500).send({message: "Sharing Code Failed"})
     }
 }
+
+export const stopShareContent = async (req : Request, res : Response) => {
+    try{
+        const content =  req.body;
+        const contentId = content.contentId;
+
+        await ContentModel.findByIdAndUpdate(contentId, {share : false})
+        
+        await shareModel.findOneAndDelete({contentId : String(contentId)})
+
+        res.status(200).send({success : true, contentId});
+    }
+    catch(e : any) {
+        console.log(e.message)
+        res.status(500).send({message: "Sharing Code Failed"})
+    }
+}
